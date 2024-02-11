@@ -46,13 +46,6 @@ def get_all_blogs(db_session: Session = Depends(get_db)):
 
 
 # Let us now build a route that will support us in updating a blog
-@router.get("", response_model=List[ShowBlog])
-def get_all_blogs(db_session: Session = Depends(get_db)):
-    blog_list = list_blogs(db_session=db_session)
-    return blog_list
-
-
-# Let us now build a route that will support us in updating a blog
 @router.put("/{blog_id}", response_model=ShowBlog)
 def update_a_blog(blog_id: int, blog: UpdateBlog,
                   db_session: Session = Depends(get_db),
