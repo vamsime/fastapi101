@@ -3,10 +3,12 @@ from core.config import settings
 from db.session import engine
 # from db.base import Base
 from apis.base import api_router
+from apps.base import app_router
 
 
 def include_router(app_inp):
     app_inp.include_router(api_router)
+    app_inp.include_router(app_router)
 
 
 def create_tables():
@@ -28,6 +30,7 @@ def start_application():
 app = start_application()
 
 
-@app.get("/")
+@app.get("/About")
 def hello():
     return {"message": "Hello FastAPI🚀"}
+
