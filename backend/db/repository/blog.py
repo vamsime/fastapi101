@@ -47,3 +47,14 @@ def delete_blog_by_id(blog_id: int, db_session: Session, author_id: int):
     blog_in_db.delete()
     db_session.commit()
     return {"msg": f"Deleted blog with id {blog_id}"}
+
+
+def delete_blog(blog_id: int, author_id: int, db: Session):
+    blog_in_db = db.query(Blog).filter(Blog.id == blog_id)
+    if not blog_in_db.first():
+        return {"error": f"Could not find blog with id {blog_id}"}
+    if not blog_in_db.first().author_id == author_id:
+        return {"error": "Only the author can delete a blog"}
+    blog_in_db.delete()
+    db.commit()
+    return {"msg": f"Deleted blog with id {blog_id}"}
