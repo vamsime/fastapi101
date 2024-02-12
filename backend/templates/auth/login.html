@@ -1,0 +1,39 @@
+{% extends "base.html" %}  <!-- Inherited the base.html -->
+
+{% block title %}
+<title>Login</title>  <!-- Gave the appropriate title -->
+{% endblock %}
+
+
+{% block content %}
+
+<!-- This part of jinja template iterates over the lit of errors and shows them into an alert box -->
+{% for error in errors %}
+<div class="alert alert-danger">
+    <li>{{error}}</li>
+</div>
+{% endfor %}
+
+<div class="container">
+    <div class="text-center display-4">Login</div>
+    <div class="row mt-3 mb-5">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <form method="POST"> <!-- The form will have an input field for email & password and a submit button -->
+                <!-- It's a post -> the email & password won't appear in the query parameter; get would have been insecure -->
+                <label>Email</label>
+                <!-- The name is the key and the value is the actual value that is passed to the backend
+                     when the form is submitted -->
+                <input type="email" required  class="form-control mb-2" name="email" value="{{email}}" placeholder="Enter your email">
+
+                <label>Password</label>
+                <input type="password" required placeholder="Choose a secure password" value="{{password}}" name="password" class="form-control mb-2">
+
+                <button type="submit" class="btn btn-outline-success">Login</button>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
+{% endblock %}

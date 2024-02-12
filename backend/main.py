@@ -1,12 +1,19 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from core.config import settings
 from db.session import engine
-# from db.base import Base
 from apis.base import api_router
+from apps.base import app_router
 
 
 def include_router(app_inp):
     app_inp.include_router(api_router)
+    app_inp.include_router(app_router)
+
+
+# StaticFiles need to configured by mounting the static directory
+def configure_staticfiles(app_inp):
+    app_inp.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 def create_tables():
@@ -22,12 +29,14 @@ def start_application():
     # create_tables()
     # This is done to create the db migrations only by alembic
     include_router(local_app)
+    configure_staticfiles(local_app)
     return local_app
 
 
 app = start_application()
 
 
-@app.get("/")
+@app.get("/About")
 def hello():
     return {"message": "Hello FastAPI🚀"}
+
