@@ -8,7 +8,28 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="display-4">All Blogs</h1>
+    <!-- <h2 class="text-muted">All Blogs</h1> -->
+    <div class="row justify-content-center my-5">
+
+        {% for blog in blogs %}  <!-- iterating through the blogs -->
+        <div class="col-sm-4 mb-4">
+          <div class="card shadow-lg">
+            <div class="card-header">  <!-- The card header where we show the title of that particular blog  -->
+                <h5 class="card-text">{{ blog.title }}</h5>
+            </div>
+            <div class="card-body">  <!-- Creating a card body for each blog and showing the created_at in a format  -->
+              <p class="card-text">First Published : {{blog.created_at.strftime('%Y-%m-%d')}}</p>
+              <!-- We show only a small part of the content by truncating it to 16 characters  -->
+              <small class="card-text text-muted">Content : {{blog.content[:16]}}...</small>
+              <br>
+              <!-- A reference to the detailed view of the blog by creating a button with the link -->
+              <a href="/app/blog/{{blog.id}}" class="btn btn-primary my-2">Read more</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+    </div>
 </div>
 
 {% endblock %}
