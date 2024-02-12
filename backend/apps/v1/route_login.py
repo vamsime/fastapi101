@@ -62,8 +62,11 @@ def login(req: Request, email: str = Form(...), password: str = Form(...), db_se
     user = authenticate_user(email_inp=email, password_inp=password, db_session=db_session)
     if not user:
         errors.append("Incorrect email/password")
+        # in the case of an error, let us also send the email and password as part of the response so that
+        # the user will have the values that they had previously entered
         return templates.TemplateResponse("auth/login.html",
-                                          {"request": req, "errors": errors})
+                                          {"request": req, "errors": errors,
+                                           "email": email, "password": password})
     access_token = create_access_token(data_arg={"sub": email})
     resp = responses.RedirectResponse("/?alert=Successfully Logged In!", status_code=status.HTTP_302_FOUND)
     resp.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
