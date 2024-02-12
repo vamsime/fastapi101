@@ -6,6 +6,8 @@ from db.session import get_db
 from db.schemas.user import UserCreate  # UserCreate schema to validate the email and password being sent
 from db.repository.user import create_new_user
 from pydantic.error_wrappers import ValidationError  # to catch the error serve our own code
+from apis.v1.route_login import authenticate_user
+from core.security import create_access_token  # create an access token, save it in the cookie and pass to the front end
 
 
 # initialize an instance of the template
@@ -23,6 +25,7 @@ def register(req: Request, db_session: Session = Depends(get_db)):
 # 2) The home() gets executed which takes the request and parses it to home.html file
 # 3) home.html inherits the base.html
 # 4) takes the base.html and over-rides the blogs title & content
+
 
 @router.post("/register")
 def register(req: Request,
@@ -47,5 +50,23 @@ def register(req: Request,
         return templates.TemplateResponse("auth/register.html",
                                           {'request': req, "errors": errors})
 
+
+@router.get("/login")
+def login(req: Request):
+    return templates.TemplateResponse("auth/login.html", {"request": req})
+
+
+@router.post("/login")
+def login(req: Request, email: str = Form(...), password: str = Form(...), db_session: Session = Depends(get_db)):
+    errors = []
+    user = authenticate_user(email_inp=email, password_inp=password, db_session=db_session)
+    if not user:
+        errors.append("Incorrect email/password")
+        return templates.TemplateResponse("auth/login.html",
+                                          {"request": req, "errors": errors})
+    access_token = create_access_token(data_arg={"sub": email})
+    resp = responses.RedirectResponse("/?alert=Successfully Logged In!", status_code=status.HTTP_302_FOUND)
+    resp.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
+    return resp
 
 
