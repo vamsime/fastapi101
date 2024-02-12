@@ -7,8 +7,12 @@
 
 
 {% block content %}
+<!-- We want to catch the alert message sent from the home router and include it here -->
+{% with alert=alert %}
+  {% include "components/alert.html" %}
+{% endwith %}
 <div class="container">
-    <!-- <h2 class="text-muted">All Blogs</h1> -->
+    <h2 class="text-muted">All Active Blogs</h2>
     <div class="row justify-content-center my-5">
 
         {% for blog in blogs %}  <!-- iterating through the blogs -->

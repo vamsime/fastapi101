@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from core.config import settings
 from db.session import engine
-# from db.base import Base
 from apis.base import api_router
 from apps.base import app_router
 
